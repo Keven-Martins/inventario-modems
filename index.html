@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestão de Modems - Inventário</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>📊 Inventário de Modems</h1>
+        <p>Sistema completo de organização e gestão</p>
+      </header>
+
+      <div class="stats" id="stats">
+        <!-- Estatísticas carregadas via JS -->
+      </div>
+
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="🔍 Pesquisar por modelo ou série..."
+        />
+        <button id="clearSearch" class="clear-btn">Limpar</button>
+      </div>
+
+      <div class="modems-container" id="modemsContainer">
+        <!-- Modems carregados via JS -->
+      </div>
+
+      <div class="summary">
+        <h3>📋 Resumo Geral do Estoque</h3>
+        <div class="summary-grid">
+          <div class="summary-item">
+            Total Modems: <strong id="totalModems">64</strong>
+          </div>
+          <div class="summary-item">Total Fontes: <strong>53</strong></div>
+          <div class="summary-item">Cabos Rede: <strong>31</strong></div>
+          <div class="summary-item">Cabos PTO: <strong>40</strong></div>
+          <div class="summary-item">Cabos Telefone: <strong>44</strong></div>
+        </div>
+      </div>
+
+      <button class="print-btn" onclick="window.print()">
+        🖨️ Imprimir Relatório
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
