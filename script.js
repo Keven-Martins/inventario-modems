@@ -1,3 +1,11 @@
+// Configurações do EmailJS
+const EMAILJS_SERVICE_ID = "service_xv2t1ao";
+const EMAILJS_TEMPLATE_ID = "template_gip2me9";
+const EMAILJS_USER_ID = "9dD831WDZMpRIqpY2";
+
+// Inicializa EmailJS
+emailjs.init(EMAILJS_USER_ID);
+
 // Dados dos modems
 const modemsData = {
   SAGEMCOM: [
@@ -103,10 +111,8 @@ function createStats() {
 
   statsContainer.innerHTML = html;
 
-  // Adiciona evento de clique para rolar até a seção correspondente
   document.querySelectorAll(".stat-item").forEach((item) => {
     item.addEventListener("click", () => {
-      // Ignora se for o "Total" (que não existe, mas deixa como segurança)
       if (item.dataset.model.toLowerCase() !== "total") {
         const modelSection = document.querySelector(
           `.model-group[data-model="${item.dataset.model}"]`
@@ -141,7 +147,6 @@ function createModemsList() {
 
   container.innerHTML = html;
 
-  // Mostrar todos inicialmente
   document.querySelectorAll(".model-group").forEach((group) => {
     group.classList.add("show");
   });
@@ -193,11 +198,66 @@ function setupSearch() {
   });
 }
 
+// Função para assinatura digital
+function initSignaturePad() {
+  const canvas = document.getElementById("signature-canvas");
+  const signaturePad = new SignaturePad(canvas, {
+    backgroundColor: "rgb(255, 255, 255)",
+    penColor: "rgb(0, 0, 0)",
+  });
+
+  document.getElementById("clear-signature").addEventListener("click", () => {
+    signaturePad.clear();
+    document.getElementById("signature-message").style.display = "none";
+  });
+
+  document.getElementById("submit-signature").addEventListener("click", () => {
+    if (signaturePad.isEmpty()) {
+      showMessage("Por favor, assine antes de enviar!", "error");
+      return;
+    }
+
+    const dataURL = signaturePad.toDataURL("image/png");
+    const base64Data = dataURL.split(",")[1];
+    console.log(
+      "Dados da assinatura (base64):",
+      base64Data.substring(0, 50) + "..."
+    );
+
+    emailjs
+      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: "sergiooab2015@gmail.com",
+        data_assinatura: new Date().toLocaleString("pt-BR"),
+        signature_image: base64Data,
+      })
+      .then((response) => {
+        console.log("Resposta do servidor:", response);
+        showMessage("E-mail enviado com sucesso!", "success");
+        // Oculta o campo de assinatura e mostra a mensagem de agradecimento
+        document.getElementById("signature-container").style.display = "none";
+        document.getElementById("thank-you-message").style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Erro ao enviar e-mail:", error);
+        showMessage("Erro ao enviar. Verifique os IDs ou a conexão.", "error");
+      });
+  });
+}
+
+// Função auxiliar para mostrar mensagens
+function showMessage(text, type) {
+  const messageEl = document.getElementById("signature-message");
+  messageEl.textContent = text;
+  messageEl.className = `signature-message ${type}`;
+  messageEl.style.display = "block"; // Mantém a mensagem visível
+}
+
 // Inicialização
 document.addEventListener("DOMContentLoaded", () => {
   createStats();
   createModemsList();
   setupSearch();
+  initSignaturePad();
 });
 
 // Melhorar impressão
@@ -208,76 +268,4 @@ window.addEventListener("beforeprint", () => {
   document.querySelectorAll(".series-item").forEach((item) => {
     item.classList.add("show");
   });
-});
-
-// Configurações do EmailJS (substitua pelos seus IDs)
-const EMAILJS_SERVICE_ID = "SEU_SERVICE_ID"; // Ex: 'service_abc123'
-const EMAILJS_TEMPLATE_ID = "SEU_TEMPLATE_ID"; // Ex: 'template_xyz789'
-const EMAILJS_USER_ID = "SEU_USER_ID"; // Ex: 'user_def456'
-
-// Inicializa EmailJS
-emailjs.init(EMAILJS_USER_ID);
-
-// Função para assinatura digital
-function initSignaturePad() {
-  const canvas = document.getElementById("signature-canvas");
-  const signaturePad = new SignaturePad(canvas, {
-    backgroundColor: "rgb(255, 255, 255)",
-    penColor: "rgb(0, 0, 0)",
-  });
-
-  // Botão Limpar
-  document.getElementById("clear-signature").addEventListener("click", () => {
-    signaturePad.clear();
-    document.getElementById("signature-message").style.display = "none";
-  });
-
-  // Botão Enviar
-  document.getElementById("submit-signature").addEventListener("click", () => {
-    if (signaturePad.isEmpty()) {
-      showMessage("Por favor, assine antes de enviar!", "error");
-      return;
-    }
-
-    // Gera a imagem da assinatura
-    const dataURL = signaturePad.toDataURL("image/png");
-
-    // Envia e-mail via EmailJS
-    emailjs
-      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email: "sergiooab2015@gmail.com",
-        data_assinatura: new Date().toLocaleString("pt-BR"),
-        assinatura_base64: dataURL, // Anexa como base64 (EmailJS converte)
-      })
-      .then(() => {
-        showMessage(
-          "Assinatura enviada com sucesso para sergiooab2015@gmail.com!",
-          "success"
-        );
-        signaturePad.clear(); // Limpa após envio
-      })
-      .catch((error) => {
-        console.error("Erro ao enviar e-mail:", error);
-        showMessage(
-          "Erro ao enviar. Tente novamente ou verifique a conexão.",
-          "error"
-        );
-      });
-  });
-}
-
-// Função auxiliar para mostrar mensagens
-function showMessage(text, type) {
-  const messageEl = document.getElementById("signature-message");
-  messageEl.textContent = text;
-  messageEl.className = `signature-message ${type}`;
-  messageEl.style.display = "block";
-}
-
-// Inicialização (adiciona após setupSearch())
-document.addEventListener("DOMContentLoaded", () => {
-  createStats();
-  createModemsList();
-  setupSearch();
-  initSignaturePad(); // Inicializa a assinatura
 });
