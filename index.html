@@ -9,7 +9,10 @@
   <body>
     <div class="container">
       <header>
-        <h1>📊 Inventário de Modems</h1>
+        <h1>📊 Inventário de Modem</h1>
+        <h2>
+          <strong><em> Sergio Martins Palmeiras</em></i></strong>
+        </h2>
         <p>Sistema completo de organização e gestão</p>
       </header>
 
@@ -43,6 +46,25 @@
         </div>
       </div>
 
+<!-- Seção de Assinatura Digital -->
+<div class="signature-section">
+    <h2 class="section-title">✍️ Assinatura Digital de Verificação</h2>
+    <p>Após verificar o inventário, assine abaixo para confirmar.</p>
+    
+    <div class="signature-container">
+        <canvas id="signature-canvas" width="400" height="200"></canvas>
+        <div class="signature-buttons">
+            <button id="clear-signature" class="clear-signature-btn">Limpar Assinatura</button>
+            <button id="submit-signature" class="submit-signature-btn">Enviar Assinatura</button>
+        </div>
+    </div>
+    
+    <div id="signature-message" class="signature-message" style="display: none;"></div>
+</div>
+
+<!-- EmailJS SDK (para envio de e-mail) -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
       <button class="print-btn" onclick="window.print()">
         🖨️ Imprimir Relatório
       </button>
@@ -51,4 +73,3 @@
     <script src="script.js"></script>
   </body>
 </html>
-<!-- Forçando novo build em 17/10/2025 -->

@@ -18,8 +18,6 @@ def create_qr_from_text(texto: str, filename: str = "qr-code.png",
     print(f"✅ QR code salvo em: {filename}")
 
 if __name__ == "__main__":
-    # Substitua pelo link do seu site se hospedado, ou use caminho relativo
-    texto = "./index.html"  # Para arquivo local
-    # texto = "https://seu-site.com"  # Para site hospedado
+    texto = "https://keven-martins.github.io/inventario-modems/"  
     arquivo_qr = "qr-code.png"
     create_qr_from_text(texto, arquivo_qr)

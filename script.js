@@ -85,7 +85,6 @@ const statsData = {
   ZTE: 7,
   TECHNICOLOR: 6,
   "BLU-CASTLE": 6,
-  TOTAL: 64,
 };
 
 // Função para criar estatísticas
@@ -95,7 +94,7 @@ function createStats() {
 
   Object.entries(statsData).forEach(([model, count]) => {
     html += `
-            <div class="stat-item">
+            <div class="stat-item" data-model="${model}">
                 <div class="stat-number">${count}</div>
                 <div class="stat-label">${model}</div>
             </div>
@@ -103,6 +102,21 @@ function createStats() {
   });
 
   statsContainer.innerHTML = html;
+
+  // Adiciona evento de clique para rolar até a seção correspondente
+  document.querySelectorAll(".stat-item").forEach((item) => {
+    item.addEventListener("click", () => {
+      // Ignora se for o "Total" (que não existe, mas deixa como segurança)
+      if (item.dataset.model.toLowerCase() !== "total") {
+        const modelSection = document.querySelector(
+          `.model-group[data-model="${item.dataset.model}"]`
+        );
+        if (modelSection) {
+          modelSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    });
+  });
 }
 
 // Função para criar lista de modems
@@ -194,4 +208,76 @@ window.addEventListener("beforeprint", () => {
   document.querySelectorAll(".series-item").forEach((item) => {
     item.classList.add("show");
   });
+});
+
+// Configurações do EmailJS (substitua pelos seus IDs)
+const EMAILJS_SERVICE_ID = "SEU_SERVICE_ID"; // Ex: 'service_abc123'
+const EMAILJS_TEMPLATE_ID = "SEU_TEMPLATE_ID"; // Ex: 'template_xyz789'
+const EMAILJS_USER_ID = "SEU_USER_ID"; // Ex: 'user_def456'
+
+// Inicializa EmailJS
+emailjs.init(EMAILJS_USER_ID);
+
+// Função para assinatura digital
+function initSignaturePad() {
+  const canvas = document.getElementById("signature-canvas");
+  const signaturePad = new SignaturePad(canvas, {
+    backgroundColor: "rgb(255, 255, 255)",
+    penColor: "rgb(0, 0, 0)",
+  });
+
+  // Botão Limpar
+  document.getElementById("clear-signature").addEventListener("click", () => {
+    signaturePad.clear();
+    document.getElementById("signature-message").style.display = "none";
+  });
+
+  // Botão Enviar
+  document.getElementById("submit-signature").addEventListener("click", () => {
+    if (signaturePad.isEmpty()) {
+      showMessage("Por favor, assine antes de enviar!", "error");
+      return;
+    }
+
+    // Gera a imagem da assinatura
+    const dataURL = signaturePad.toDataURL("image/png");
+
+    // Envia e-mail via EmailJS
+    emailjs
+      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: "sergiooab2015@gmail.com",
+        data_assinatura: new Date().toLocaleString("pt-BR"),
+        assinatura_base64: dataURL, // Anexa como base64 (EmailJS converte)
+      })
+      .then(() => {
+        showMessage(
+          "Assinatura enviada com sucesso para sergiooab2015@gmail.com!",
+          "success"
+        );
+        signaturePad.clear(); // Limpa após envio
+      })
+      .catch((error) => {
+        console.error("Erro ao enviar e-mail:", error);
+        showMessage(
+          "Erro ao enviar. Tente novamente ou verifique a conexão.",
+          "error"
+        );
+      });
+  });
+}
+
+// Função auxiliar para mostrar mensagens
+function showMessage(text, type) {
+  const messageEl = document.getElementById("signature-message");
+  messageEl.textContent = text;
+  messageEl.className = `signature-message ${type}`;
+  messageEl.style.display = "block";
+}
+
+// Inicialização (adiciona após setupSearch())
+document.addEventListener("DOMContentLoaded", () => {
+  createStats();
+  createModemsList();
+  setupSearch();
+  initSignaturePad(); // Inicializa a assinatura
 });
