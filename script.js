@@ -36,7 +36,6 @@ const modemsData = {
     "SMBS00537DD3",
     "SMBS003E9A48",
     "SMBS00322DFE",
-    "SMBS00322DFE",
   ],
   KAON: [
     "KON09012EDD",
@@ -87,7 +86,7 @@ const modemsData = {
 };
 
 const statsData = {
-  SAGEMCOM: 28,
+  SAGEMCOM: 27,
   KAON: 10,
   FIBRERHOME: 7,
   ZTE: 7,
