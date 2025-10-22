@@ -49,7 +49,7 @@ const modemsData = {
     "KON09020FAE",
     "KON0900ED1C",
   ],
-  FIBRERHOME: [
+  FIBERHOME: [
     "FHTT9549F970",
     "FHTT954B1178",
     "FHTT95492B00",
@@ -57,6 +57,7 @@ const modemsData = {
     "FHTT9548ED88",
     "FHTT95440B30",
     "FHTT23ACCD78",
+    "FHTT23A821F8",
   ],
   ZTE: [
     "ZTEGCB314EC8",
@@ -88,7 +89,7 @@ const modemsData = {
 const statsData = {
   SAGEMCOM: 27,
   KAON: 10,
-  FIBRERHOME: 7,
+  FIBERHOME: 8,
   ZTE: 7,
   TECHNICOLOR: 6,
   "BLU-CASTLE": 6,
