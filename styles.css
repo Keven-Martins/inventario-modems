@@ -173,6 +173,8 @@ header p {
   font-size: 0.9em;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: none;
+  cursor: pointer;
+  user-select: none;
 }
 
 .series-item.show {
@@ -339,4 +341,19 @@ header p {
   .series-item {
     display: block !important;
   }
+}
+
+/* Seleção visual com checkmark */
+.series-item.selecionada {
+  background-color: #2196f3;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+/* Checkmark visual */
+.series-item.selecionada::before {
+  content: "✅";
+  margin-right: 8px;
+  display: inline-block;
 }
